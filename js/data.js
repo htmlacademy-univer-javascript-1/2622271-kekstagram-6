@@ -29,3 +29,6 @@ const DESCRIPTIONS = [
 ];
 
 export {PHOTO_COUNT, NAMES, MESSAGES, DESCRIPTIONS };
+
+
+
