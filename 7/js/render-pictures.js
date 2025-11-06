@@ -5,10 +5,10 @@ const renderPicture = (picture)=>{
   const {url, description, comments, likes} = picture;
   const pictureElement = pictureTemplate.cloneNode(true);
 
-  pictureElement.querySelector('picture_img').src = url;
-  pictureElement.querySelector('picture_img').alt = description;
-  pictureElement.querySelector('picture_comments').textContent = comments.length;
-  pictureElement.querySelector('picture_likes').textContent = likes;
+  pictureElement.querySelector('.picture_img').src = url;
+  pictureElement.querySelector('.picture_img').alt = description;
+  pictureElement.querySelector('.picture_comments').textContent = comments.length;
+  pictureElement.querySelector('.picture_likes').textContent = likes;
 
   return pictureElement;
 };
