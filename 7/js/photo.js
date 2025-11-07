@@ -3,10 +3,8 @@
 import { NAMES, MESSAGES, DESCRIPTIONS, PHOTO_COUNT } from './data.js';
 import { getRandomInteger, getRandomArrayElement, getUniqueRandomIntegerGenerator } from './util.js';
 
-//уникальные айди для комментариев
 const generateCommentId = getUniqueRandomIntegerGenerator(1, 1000);
 
-//создание комментария
 const createComment = () => ({
   id: generateCommentId(),
   avatar: `img/avatar-${getRandomInteger(1, 6)}.svg`,
@@ -16,7 +14,7 @@ const createComment = () => ({
 
 //объекты фото
 const createPhoto = (index) => {
-  const commentsCount = getRandomInteger(0, 30);
+  const commentsCount = getRandomInteger(0, 25);
   const comments = Array.from({length: commentsCount}, createComment);
 
   return {
