@@ -11,18 +11,6 @@ const hashtagsInput = form.querySelector('.text__hashtags');
 const commentInput = form.querySelector('.text__description');
 const body = document.body;
 
-const closeUploadForm = () => {
-  uploadOverlay.classList.add('hidden');
-  body.classList.remove('modal-open');
-
-  form.reset();
-
-  resetEffectsModule();
-
-  document.removeEventListener('keydown', onDocumentKeydown);
-  closeButton.removeEventListener('click', onCloseButtonClick);
-};
-
 const onDocumentKeydown = (evt) => {
   if (isEscKey(evt)) {
     const isHashtagsFocused = document.activeElement === hashtagsInput;
@@ -40,6 +28,18 @@ const onDocumentKeydown = (evt) => {
 const onCloseButtonClick = (evt) => {
   evt.preventDefault();
   closeUploadForm();
+};
+
+const closeUploadForm = () => {
+  uploadOverlay.classList.add('hidden');
+  body.classList.remove('modal-open');
+
+  form.reset();
+
+  resetEffectsModule();
+
+  document.removeEventListener('keydown', onDocumentKeydown);
+  closeButton.removeEventListener('click', onCloseButtonClick);
 };
 
 const openUploadForm = () => {
