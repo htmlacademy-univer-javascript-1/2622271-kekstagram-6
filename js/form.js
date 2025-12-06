@@ -11,7 +11,7 @@ const hashtagsInput = form.querySelector('.text__hashtags');
 const commentInput = form.querySelector('.text__description');
 const body = document.body;
 
-const onDocumentKeydown = (evt) => {
+function onDocumentKeydown(evt) {
   if (isEscKey(evt)) {
     const isHashtagsFocused = document.activeElement === hashtagsInput;
     const isCommentFocused = document.activeElement === commentInput;
@@ -23,12 +23,24 @@ const onDocumentKeydown = (evt) => {
     evt.preventDefault();
     closeUploadForm();
   }
-};
+}
 
-const onCloseButtonClick = (evt) => {
+function onCloseButtonClick(evt) {
   evt.preventDefault();
   closeUploadForm();
-};
+}
+
+function closeUploadForm() {
+  uploadOverlay.classList.add('hidden');
+  body.classList.remove('modal-open');
+
+  form.reset();
+
+  resetEffectsModule();
+
+  document.removeEventListener('keydown', onDocumentKeydown);
+  closeButton.removeEventListener('click', onCloseButtonClick);
+}
 
 const openUploadForm = () => {
   uploadOverlay.classList.remove('hidden');
@@ -40,22 +52,8 @@ const openUploadForm = () => {
   closeButton.addEventListener('click', onCloseButtonClick);
 };
 
-const closeUploadForm = () => {
-  uploadOverlay.classList.add('hidden');
-  body.classList.remove('modal-open');
-
-  form.reset();
-
-  resetEffectsModule();
-
-  document.removeEventListener('keydown', onDocumentKeydown);
-  closeButton.removeEventListener('click', onCloseButtonClick);
-};
-
 const onFileInputChange = () => {
   if (uploadInput.files && uploadInput.files.length > 0) {
-    //подстановка фото
-
     openUploadForm();
   }
 };
@@ -65,10 +63,7 @@ const initUploadForm = () => {
 
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
-
     // отправка на сервер
-    //const formData = new FormData(form);
-    // closeUploadForm();
   });
 };
 
