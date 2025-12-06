@@ -19,57 +19,6 @@ let currentScale = DEFAULT_SCALE;
 let currentEffect = 'none';
 let slider = null;
 
-const EFFECTS = {
-  none: {
-    min: 0,
-    max: 100,
-    step: 1,
-    unit: '',
-    filter: null,
-    className: 'effects__preview--none'
-  },
-  chrome: {
-    min: 0,
-    max: 1,
-    step: 0.1,
-    unit: '',
-    filter: 'grayscale',
-    className: 'effects__preview--chrome'
-  },
-  sepia: {
-    min: 0,
-    max: 1,
-    step: 0.1,
-    unit: '',
-    filter: 'sepia',
-    className: 'effects__preview--sepia'
-  },
-  marvin: {
-    min: 0,
-    max: 100,
-    step: 1,
-    unit: '%',
-    filter: 'invert',
-    className: 'effects__preview--marvin'
-  },
-  phobos: {
-    min: 0,
-    max: 3,
-    step: 0.1,
-    unit: 'px',
-    filter: 'blur',
-    className: 'effects__preview--phobos'
-  },
-  heat: {
-    min: 1,
-    max: 3,
-    step: 0.1,
-    unit: '',
-    filter: 'brightness',
-    className: 'effects__preview--heat'
-  }
-};
-
 const updateScale = (newScale) => {
   currentScale = newScale;
   scaleControlValue.value = `${currentScale}%`;
@@ -100,6 +49,22 @@ const initScale = () => {
 
 const resetScale = () => {
   updateScale(DEFAULT_SCALE);
+};
+
+const applyEffect = (value) => {
+  const effect = EFFECTS[currentEffect];
+
+  if (currentEffect === 'none') {
+    previewImage.style.filter = 'none';
+    previewImage.className = '';
+    previewImage.classList.add('effects__preview--none');
+    return;
+  }
+
+  const filterValue = `${effect.filter}(${value}${effect.unit})`;
+  previewImage.style.filter = filterValue;
+  previewImage.className = '';
+  previewImage.classList.add(effect.className);
 };
 
 const createSlider = () => {
@@ -140,22 +105,6 @@ const createSlider = () => {
     effectLevelValue.value = value;
     applyEffect(value);
   });
-};
-
-const applyEffect = (value) => {
-  const effect = EFFECTS[currentEffect];
-
-  if (currentEffect === 'none') {
-    previewImage.style.filter = 'none';
-    previewImage.className = '';
-    previewImage.classList.add('effects__preview--none');
-    return;
-  }
-
-  const filterValue = `${effect.filter}(${value}${effect.unit})`;
-  previewImage.style.filter = filterValue;
-  previewImage.className = '';
-  previewImage.classList.add(effect.className);
 };
 
 const updateSliderVisibility = () => {
@@ -233,6 +182,57 @@ const initEffectsModule = () => {
 const resetEffectsModule = () => {
   resetScale();
   resetEffects();
+};
+
+const EFFECTS = {
+  none: {
+    min: 0,
+    max: 100,
+    step: 1,
+    unit: '',
+    filter: null,
+    className: 'effects__preview--none'
+  },
+  chrome: {
+    min: 0,
+    max: 1,
+    step: 0.1,
+    unit: '',
+    filter: 'grayscale',
+    className: 'effects__preview--chrome'
+  },
+  sepia: {
+    min: 0,
+    max: 1,
+    step: 0.1,
+    unit: '',
+    filter: 'sepia',
+    className: 'effects__preview--sepia'
+  },
+  marvin: {
+    min: 0,
+    max: 100,
+    step: 1,
+    unit: '%',
+    filter: 'invert',
+    className: 'effects__preview--marvin'
+  },
+  phobos: {
+    min: 0,
+    max: 3,
+    step: 0.1,
+    unit: 'px',
+    filter: 'blur',
+    className: 'effects__preview--phobos'
+  },
+  heat: {
+    min: 1,
+    max: 3,
+    step: 0.1,
+    unit: '',
+    filter: 'brightness',
+    className: 'effects__preview--heat'
+  }
 };
 
 export { initEffectsModule, resetEffectsModule };

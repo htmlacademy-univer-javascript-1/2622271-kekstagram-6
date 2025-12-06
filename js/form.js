@@ -11,6 +11,25 @@ const hashtagsInput = form.querySelector('.text__hashtags');
 const commentInput = form.querySelector('.text__description');
 const body = document.body;
 
+const onDocumentKeydown = (evt) => {
+  if (isEscKey(evt)) {
+    const isHashtagsFocused = document.activeElement === hashtagsInput;
+    const isCommentFocused = document.activeElement === commentInput;
+
+    if (isHashtagsFocused || isCommentFocused) {
+      return;
+    }
+
+    evt.preventDefault();
+    closeUploadForm();
+  }
+};
+
+const onCloseButtonClick = (evt) => {
+  evt.preventDefault();
+  closeUploadForm();
+};
+
 const openUploadForm = () => {
   uploadOverlay.classList.remove('hidden');
   body.classList.add('modal-open');
@@ -33,25 +52,6 @@ const closeUploadForm = () => {
   closeButton.removeEventListener('click', onCloseButtonClick);
 };
 
-const onDocumentKeydown = (evt) => {
-  if (isEscKey(evt)) {
-    const isHashtagsFocused = document.activeElement === hashtagsInput;
-    const isCommentFocused = document.activeElement === commentInput;
-
-    if (isHashtagsFocused || isCommentFocused) {
-      return;
-    }
-
-    evt.preventDefault();
-    closeUploadForm();
-  }
-};
-
-const onCloseButtonClick = (evt) => {
-  evt.preventDefault();
-  closeUploadForm();
-};
-
 const onFileInputChange = () => {
   if (uploadInput.files && uploadInput.files.length > 0) {
     //подстановка фото
@@ -66,9 +66,8 @@ const initUploadForm = () => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
-    const formData = new FormData(form);
-
     // отправка на сервер
+    //const formData = new FormData(form);
     // closeUploadForm();
   });
 };
