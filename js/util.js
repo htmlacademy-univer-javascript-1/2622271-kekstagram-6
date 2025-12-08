@@ -26,19 +26,21 @@ const getUniqueRandomIntegerGenerator = (min, max) => {
 
 function isEscKey(evt) {
   return evt.key === 'Escape';
-};
+}
 
 function checkStringLength(string, maxLength) {
   return string.length <= maxLength;
-};
+}
 
 function checkStringMinLength(string, minLength) {
   return string.length >= minLength;
-};
+}
 
-export{ getRandomInteger,
-        getRandomArrayElement,
-        getUniqueRandomIntegerGenerator,
-        isEscKey,
-        checkStringLength,
-        checkStringMinLength};
+export{
+  getRandomInteger,
+  getRandomArrayElement,
+  getUniqueRandomIntegerGenerator,
+  isEscKey,
+  checkStringLength,
+  checkStringMinLength
+};

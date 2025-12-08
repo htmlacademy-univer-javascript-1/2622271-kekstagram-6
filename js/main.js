@@ -6,4 +6,3 @@ import './valid.js';
 
 renderPictures(generatePhotos());
 initUploadForm();
-
