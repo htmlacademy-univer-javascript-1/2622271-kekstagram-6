@@ -1,3 +1,4 @@
+/*
 //генерация данных для фото
 
 import { NAMES, MESSAGES, DESCRIPTIONS, PHOTO_COUNT } from './data.js';
@@ -30,3 +31,4 @@ const createPhoto = (index) => {
 const generatePhotos = () => Array.from({length: PHOTO_COUNT}, (_, index) => createPhoto(index + 1));
 
 export { generatePhotos };
+*/

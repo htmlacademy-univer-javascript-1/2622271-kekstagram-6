@@ -21,12 +21,13 @@ const renderPicture = (picture) => {
 };
 
 const renderPictures = (objects) => {
-  pictures.querySelectorAll('.picture').forEach((picture) => picture.remove());
+  const userPictures = pictures.querySelectorAll('.picture');
+  userPictures.forEach((picture) => picture.remove());
 
   const fragment = document.createDocumentFragment();
-  for (let i = 0; i < objects.length; i++) {
-    fragment.appendChild(renderPicture(objects[i]));
-  }
+  objects.forEach((object) => {
+    fragment.appendChild(renderPicture(object));
+  });
   pictures.appendChild(fragment);
 };
 

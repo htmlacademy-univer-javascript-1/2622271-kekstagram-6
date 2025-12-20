@@ -1,8 +1,18 @@
-import { generatePhotos } from './photo.js';
 import { renderPictures } from './render-pictures.js';
 import { initUploadForm } from './form.js';
+import { loadData } from './api.js';
+import { showError } from './messages.js';
 import './big-picture.js';
 import './valid.js';
 
-renderPictures(generatePhotos());
+const loadAndRenderPhotos = async () => {
+  try {
+    const photos = await loadData();
+    renderPictures(photos);
+  } catch (error) {
+    showError(error.message);
+  }
+};
+
+loadAndRenderPhotos();
 initUploadForm();

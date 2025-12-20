@@ -100,6 +100,8 @@ const initScale = () => {
 
 const resetScale = () => {
   updateScale(DEFAULT_SCALE);
+  scaleSmallerButton.removeEventListener('click', onScaleSmallerClick);
+  scaleBiggerButton.removeEventListener('click', onScaleBiggerClick);
 };
 
 const applyEffect = (value) => {
@@ -223,6 +225,8 @@ const resetEffects = () => {
   previewImage.className = '';
   previewImage.classList.add('effects__preview--none');
   effectLevelValue.value = '';
+
+  effectsList.removeEventListener('change', onEffectChange);
 };
 
 const initEffectsModule = () => {
