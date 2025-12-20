@@ -5,20 +5,32 @@ const messageTemplate = {
   success: document.querySelector('#success').content.querySelector('.success')
 };
 
-const onDocumentKeydown = (evt) => {
-    if (isEscKey(evt)) {
-      closeMessage();
-    }
-  };
+let messageElement = null;
 
-  const onDocumentClick = (evt) => {
-    if (!messageElement.contains(evt.target)) {
-      closeMessage();
-    }
-  };
+const closeMessage = () => {
+  if (messageElement) {
+    messageElement.remove();
+    document.removeEventListener('keydown', onDocumentKeydown);
+    document.removeEventListener('click', onDocumentClick);
+    messageElement = null;
+  }
+};
+
+const onDocumentKeydown = (evt) => {
+  if (isEscKey(evt)) {
+    evt.preventDefault();
+    closeMessage();
+  }
+};
+
+const onDocumentClick = (evt) => {
+  if (messageElement && !messageElement.contains(evt.target)) {
+    closeMessage();
+  }
+};
 
 const showMessage = (type, text = '') => {
-  const messageElement = messageTemplate[type].cloneNode(true);
+  messageElement = messageTemplate[type].cloneNode(true);
 
   if (text) {
     const titleElement = messageElement.querySelector(`.${type}__title`);
@@ -26,15 +38,8 @@ const showMessage = (type, text = '') => {
   }
 
   const buttonElement = messageElement.querySelector(`.${type}__button`);
-
-  const closeMessage = () => {
-    messageElement.remove();
-    document.removeEventListener('keydown', onDocumentKeydown);
-    document.removeEventListener('click', onDocumentClick);
-  };
-
-
   buttonElement.addEventListener('click', closeMessage);
+
   document.addEventListener('keydown', onDocumentKeydown);
   document.addEventListener('click', onDocumentClick);
 
