@@ -1,5 +1,3 @@
-import { getRandomInteger } from './util.js';
-
 const RANDOM_PHOTOS_COUNT = 10;
 const DEBOUNCE_DELAY = 500;
 
@@ -19,9 +17,7 @@ const getRandomPhotos = (items) => {
   return shuffled.slice(0, RANDOM_PHOTOS_COUNT);
 };
 
-const getDiscussedPhotos = (items) => {
-  return [...items].sort((a, b) => b.comments.length - a.comments.length);
-};
+const getDiscussedPhotos = (items) => [...items].sort((a, b) => b.comments.length - a.comments.length);
 
 const getFilteredPhotos = () => {
   switch (currentFilter) {
