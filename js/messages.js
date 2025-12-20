@@ -7,6 +7,15 @@ const messageTemplate = {
 
 let messageElement = null;
 
+const closeMessage = () => {
+  if (messageElement) {
+    messageElement.remove();
+    document.removeEventListener('keydown', onDocumentKeydown);
+    document.removeEventListener('click', onDocumentClick);
+    messageElement = null;
+  }
+};
+
 const onDocumentKeydown = (evt) => {
   if (isEscKey(evt)) {
     evt.preventDefault();
@@ -20,16 +29,11 @@ const onDocumentClick = (evt) => {
   }
 };
 
-const closeMessage = () => {
-  if (messageElement) {
-    messageElement.remove();
-    document.removeEventListener('keydown', onDocumentKeydown);
-    document.removeEventListener('click', onDocumentClick);
-    messageElement = null;
-  }
-};
-
 const showMessage = (type, text = '') => {
+  if (messageElement) {
+    closeMessage();
+  }
+
   messageElement = messageTemplate[type].cloneNode(true);
 
   if (text) {
