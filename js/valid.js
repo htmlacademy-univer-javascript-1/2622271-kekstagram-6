@@ -4,15 +4,6 @@ const form = document.querySelector('.img-upload__form');
 const hashtagsInput = form.querySelector('.text__hashtags');
 const commentInput = form.querySelector('.text__description');
 
-const pristine = new Pristine(form, {
-  classTo: 'img-upload__text',
-  errorClass: 'form__item--invalid',
-  successClass: 'form__item--valid',
-  errorTextParent: 'img-upload__text',
-  errorTextTag: 'span',
-  errorTextClass: 'form__error'
-});
-
 const validateHashtagFormat = (hashtag) => {
   if (hashtag.length === 0) {
     return true;
@@ -79,32 +70,10 @@ function validateComments(value) {
   return checkStringLength(value, 140);
 }
 
-pristine.addValidator(
-  hashtagsInput,
+export {
   validateHashtags,
-  'Хэш-теги должны соответствовать правилам: начинаться с #, содержать только буквы/цифры, макс. 20 символов, не более 5 уникальных тегов'
-);
-
-pristine.addValidator(
-  commentInput,
   validateComments,
-  'Максимальная длина комментария - 140 символов'
-);
-
-hashtagsInput.addEventListener('keydown', (evt) => {
-  if (evt.key === 'Escape') {
-    evt.stopPropagation();
-  }
-});
-
-commentInput.addEventListener('keydown', (evt) => {
-  if (evt.key === 'Escape') {
-    evt.stopPropagation();
-  }
-});
-
-form.addEventListener('submit', (evt) => {
-  if (!pristine.validate()) {
-    evt.preventDefault();
-  }
-});
+  hashtagsInput,
+  commentInput,
+  form
+};
