@@ -5,6 +5,18 @@ const messageTemplate = {
   success: document.querySelector('#success').content.querySelector('.success')
 };
 
+const onDocumentKeydown = (evt) => {
+    if (isEscKey(evt)) {
+      closeMessage();
+    }
+  };
+
+  const onDocumentClick = (evt) => {
+    if (!messageElement.contains(evt.target)) {
+      closeMessage();
+    }
+  };
+
 const showMessage = (type, text = '') => {
   const messageElement = messageTemplate[type].cloneNode(true);
 
@@ -21,17 +33,6 @@ const showMessage = (type, text = '') => {
     document.removeEventListener('click', onDocumentClick);
   };
 
-  const onDocumentKeydown = (evt) => {
-    if (isEscKey(evt)) {
-      closeMessage();
-    }
-  };
-
-  const onDocumentClick = (evt) => {
-    if (!messageElement.contains(evt.target)) {
-      closeMessage();
-    }
-  };
 
   buttonElement.addEventListener('click', closeMessage);
   document.addEventListener('keydown', onDocumentKeydown);
