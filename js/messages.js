@@ -34,11 +34,12 @@ const showMessage = (type, text = '') => {
   messageElement = messageTemplate[type].cloneNode(true);
 
   if (text) {
-    const titleElement = messageElement.querySelector(.${type}__title);
+    const titleElement = messageElement.querySelector(`.${type}__title`);
     titleElement.textContent = text;
   }
 
-  const buttonElement = messageElement.querySelector(.${type}__button);
+  const buttonElement = messageElement.querySelector(`.${type}__button`);
+
   buttonElement.addEventListener('click', closeMessage);
 
   document.addEventListener('keydown', onDocumentKeydown);
