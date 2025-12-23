@@ -1,14 +1,37 @@
 import { isEscKey } from './util.js';
+import { onFormEscKeydown } from './form.js';
 
 const messageTemplate = {
   error: document.querySelector('#error').content.querySelector('.error'),
-  success: document.querySelector('#success').content.querySelector('.success')
+  success: document.querySelector('#success').content.querySelector('.success'),
+  dataError: null // Добавляем шаблон для ошибки данных
 };
 
 let messageElement = null;
-let closeMessage = null;
 
-const onDocumentKeydown = (evt) => {
+// Создаём шаблон для ошибки данных, если он не существует в DOM
+if (!messageTemplate.dataError) {
+  messageTemplate.dataError = document.createElement('div');
+  messageTemplate.dataError.className = 'data-error';
+  messageTemplate.dataError.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 10px 3px;
+    font-size: 30px;
+    text-align: center;
+    background-color: red;
+    color: white;
+  `;
+
+  const message = document.createElement('p');
+  message.textContent = 'Ошибка загрузки данных';
+  messageTemplate.dataError.appendChild(message);
+}
+
+const onMessageEscKeydown = (evt) => {
   if (isEscKey(evt)) {
     evt.preventDefault();
     closeMessage();
@@ -16,44 +39,61 @@ const onDocumentKeydown = (evt) => {
 };
 
 const onDocumentClick = (evt) => {
-  if (messageElement && !messageElement.contains(evt.target)) {
-    closeMessage();
+  const inner = messageElement.querySelector('.success__inner, .error__inner');
+
+  if (!inner || inner.contains(evt.target)) {
+    return;
   }
+
+  closeMessage();
 };
 
-closeMessage = () => {
-  if (messageElement) {
-    messageElement.remove();
-    document.removeEventListener('keydown', onDocumentKeydown);
-    document.removeEventListener('click', onDocumentClick);
-    messageElement = null;
+function closeMessage() {
+  if (!messageElement) {
+    return;
   }
-};
 
-const showMessage = (type, text = '') => {
+  messageElement.remove();
+  messageElement = null;
+
+  document.removeEventListener('keydown', onMessageEscKeydown);
+  document.removeEventListener('click', onDocumentClick);
+
+  document.addEventListener('keydown', onFormEscKeydown);
+}
+
+const showMessage = (type) => {
   messageElement = messageTemplate[type].cloneNode(true);
+  messageElement.style.zIndex = '1000';
+  // Для обычных error/success сообщений
+  if (type === 'error' || type === 'success') {
+    const button = messageElement.querySelector(`.${type}__button`);
+    if (button) {
+      button.addEventListener('click', closeMessage);
+    }
 
-  if (text) {
-    const titleElement = messageElement.querySelector(`.${type}__title`);
-    titleElement.textContent = text;
+    document.removeEventListener('keydown', onFormEscKeydown);
+    document.addEventListener('keydown', onMessageEscKeydown);
+    document.addEventListener('click', onDocumentClick);
   }
-
-  const buttonElement = messageElement.querySelector(`.${type}__button`);
-
-  buttonElement.addEventListener('click', closeMessage);
-
-  document.addEventListener('keydown', onDocumentKeydown);
-  document.addEventListener('click', onDocumentClick);
-
+  // Для data-error не добавляем обработчики закрытия
+  if (type === 'dataError') {
+    // Автоматическое скрытие через 5 секунд
+    setTimeout(closeMessage, 5000);
+  }
   document.body.appendChild(messageElement);
-};
-
-const showError = (text) => {
-  showMessage('error', text);
 };
 
 const showSuccess = () => {
   showMessage('success');
 };
 
-export { showError, showSuccess };
+const showError = (message) => {
+  if (message === 'Не удалось загрузить фотографии. Попробуйте обновить страницу') {
+    showMessage('dataError');
+  } else {
+    showMessage('error');
+  }
+};
+
+export { showSuccess, showError };
