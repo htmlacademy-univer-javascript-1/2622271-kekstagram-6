@@ -71,7 +71,11 @@ const initFilters = (loadedPhotos, renderCallback) => {
 
   filtersContainer.classList.remove('img-filters--inactive');
 
-  document.querySelector('.img-filters__form').addEventListener('click', onFilterButtonClick);
+  const form = document.querySelector('.img-filters__form');
+  if (form) {
+    form.removeEventListener('click', onFilterButtonClick);
+    form.addEventListener('click', onFilterButtonClick);
+  }
 };
 
 export { initFilters };

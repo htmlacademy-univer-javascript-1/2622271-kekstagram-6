@@ -2,18 +2,25 @@ import { isEscKey } from './util.js';
 import { initEffectsModule, resetEffectsModule } from './effects.js';
 import { sendData } from './api.js';
 import { showSuccess, showError } from './messages.js';
-import { validateHashtags, validateComments, hashtagsInput, commentInput, form } from './valid.js';
+import {
+  validateHashtags,
+  validateComments,
+  hashtagsInput,
+  commentInput,
+  form
+} from './valid.js';
 
 const uploadInput = form.querySelector('#upload-file');
 const uploadOverlay = form.querySelector('.img-upload__overlay');
 const closeButton = form.querySelector('#upload-cancel');
 const submitButton = form.querySelector('.img-upload__submit');
 const previewImage = form.querySelector('.img-upload__preview img');
+const effectPreviews = form.querySelectorAll('.effects__preview'); // Добавлено
 const body = document.body;
 
 let pristine;
 
-function onDocumentKeydown(evt) {
+const onFormEscKeydown = (evt) => {
   if (isEscKey(evt)) {
     const isHashtagsFocused = document.activeElement === hashtagsInput;
     const isCommentFocused = document.activeElement === commentInput;
@@ -25,7 +32,7 @@ function onDocumentKeydown(evt) {
     evt.preventDefault();
     closeUploadForm();
   }
-}
+};
 
 function onCloseButtonClick(evt) {
   evt.preventDefault();
@@ -34,9 +41,12 @@ function onCloseButtonClick(evt) {
 
 function resetForm() {
   form.reset();
+  uploadInput.value = '';
   resetEffectsModule();
-
   previewImage.src = 'img/upload-default-image.jpg';
+  effectPreviews.forEach((preview) => {
+    preview.style.backgroundImage = 'url("img/upload-default-image.jpg")';
+  });
 
   if (pristine) {
     pristine.reset();
@@ -49,19 +59,21 @@ function closeUploadForm() {
 
   resetForm();
 
-  document.removeEventListener('keydown', onDocumentKeydown);
+  document.removeEventListener('keydown', onFormEscKeydown);
   closeButton.removeEventListener('click', onCloseButtonClick);
 }
 
+const updateEffectPreviews = (imageUrl) => {
+  effectPreviews.forEach((preview) => {
+    preview.style.backgroundImage = `url(${imageUrl})`;
+  });
+};
+
 const openUploadForm = (file) => {
   if (file && file.type.startsWith('image/')) {
-    const reader = new FileReader();
-
-    reader.onload = (event) => {
-      previewImage.src = event.target.result;
-    };
-
-    reader.readAsDataURL(file);
+    const imageUrl = URL.createObjectURL(file);
+    previewImage.src = imageUrl;
+    updateEffectPreviews(imageUrl);
   }
 
   uploadOverlay.classList.remove('hidden');
@@ -69,14 +81,13 @@ const openUploadForm = (file) => {
 
   initEffectsModule();
 
-  document.addEventListener('keydown', onDocumentKeydown);
+  document.addEventListener('keydown', onFormEscKeydown);
   closeButton.addEventListener('click', onCloseButtonClick);
 };
 
 const onFileInputChange = () => {
-  if (uploadInput.files && uploadInput.files.length > 0) {
-    const file = uploadInput.files[0];
-    openUploadForm(file);
+  if (uploadInput.files.length > 0) {
+    openUploadForm(uploadInput.files[0]);
   }
 };
 
@@ -106,7 +117,7 @@ const onFormSubmit = async (evt) => {
     showSuccess();
     closeUploadForm();
   } catch (error) {
-    showError(error.message);
+    showError();
   } finally {
     unblockSubmitButton();
   }
@@ -116,40 +127,23 @@ const initUploadForm = () => {
   uploadInput.addEventListener('change', onFileInputChange);
   form.addEventListener('submit', onFormSubmit);
 
-  const pristineConfig = {
+  pristine = new Pristine(form, {
     classTo: 'img-upload__field-wrapper',
-    errorClass: 'form__item--invalid',
-    successClass: 'form__item--valid',
     errorTextParent: 'img-upload__field-wrapper',
-    errorTextTag: 'span',
     errorTextClass: 'form__error'
-  };
-
-  pristine = new Pristine(form, pristineConfig);
+  });
 
   pristine.addValidator(
     hashtagsInput,
     validateHashtags,
-    'Хэш-теги должны соответствовать правилам: начинаться с #, содержать только буквы/цифры, макс. 20 символов, не более 5 уникальных тегов'
+    'Некорректные хэш-теги'
   );
 
   pristine.addValidator(
     commentInput,
     validateComments,
-    'Максимальная длина комментария - 140 символов'
+    'Длина комментария не более 140 символов'
   );
-
-  hashtagsInput.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      evt.stopPropagation();
-    }
-  });
-
-  commentInput.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      evt.stopPropagation();
-    }
-  });
 };
 
-export { initUploadForm, closeUploadForm };
+export { initUploadForm, closeUploadForm, onFormEscKeydown };

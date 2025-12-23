@@ -40,9 +40,14 @@ const renderComments = () => {
 
   commentsShown += commentsToShow.length;
 
-  const commentCountText = `${commentsShown} из ${currentComments.length} комментариев`;
-  commentCountBlock.innerHTML = '';
-  commentCountBlock.textContent = commentCountText;
+  const commentCountText = `${commentsShown} из <span class="social__comment-total-count">${currentComments.length}</span> комментариев`;
+  commentCountBlock.innerHTML = commentCountText;
+
+  const shownCountSpan = document.createElement('span');
+  shownCountSpan.className = 'social__comment-shown-count';
+  shownCountSpan.textContent = commentsShown;
+  shownCountSpan.style.display = 'none';
+  commentCountBlock.prepend(shownCountSpan);
 
   if (commentsShown >= currentComments.length) {
     commentsLoader.classList.add('hidden');
