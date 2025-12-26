@@ -1,3 +1,7 @@
+import { isEscKey } from './util.js';
+
+const COMMENTS_PER_PORTION = 5;
+
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureImg = bigPicture.querySelector('.big-picture__img img');
 const likesCount = bigPicture.querySelector('.likes-count');
@@ -10,7 +14,6 @@ const closeButton = bigPicture.querySelector('.big-picture__cancel');
 
 let currentComments = [];
 let commentsShown = 0;
-const COMMENTS_PER_PORTION = 5;
 
 const createCommentElement = (comment) => {
   const commentElement = document.createElement('li');
@@ -93,7 +96,7 @@ closeButton.addEventListener('click', () => {
 });
 
 document.addEventListener('keydown', (evt) => {
-  if (evt.key === 'Escape' && !bigPicture.classList.contains('hidden')) {
+  if (isEscKey(evt) && !bigPicture.classList.contains('hidden')) {
     closeBigPicture();
   }
 });

@@ -5,20 +5,6 @@ const MAX_SCALE = 100;
 const SCALE_STEP = 25;
 const DEFAULT_SCALE = 100;
 
-const form = document.querySelector('.img-upload__form');
-const scaleControlValue = form.querySelector('.scale__control--value');
-const scaleSmallerButton = form.querySelector('.scale__control--smaller');
-const scaleBiggerButton = form.querySelector('.scale__control--bigger');
-const previewImage = form.querySelector('.img-upload__preview img');
-const effectsList = form.querySelector('.effects__list');
-const effectLevelContainer = form.querySelector('.img-upload__effect-level');
-const effectLevelSlider = form.querySelector('.effect-level__slider');
-const effectLevelValue = form.querySelector('.effect-level__value');
-
-let currentScale = DEFAULT_SCALE;
-let currentEffect = 'none';
-let slider = null;
-
 const EFFECTS = {
   none: {
     min: 0,
@@ -69,6 +55,20 @@ const EFFECTS = {
     className: 'effects__preview--heat'
   }
 };
+
+const form = document.querySelector('.img-upload__form');
+const scaleControlValue = form.querySelector('.scale__control--value');
+const scaleSmallerButton = form.querySelector('.scale__control--smaller');
+const scaleBiggerButton = form.querySelector('.scale__control--bigger');
+const previewImage = form.querySelector('.img-upload__preview img');
+const effectsList = form.querySelector('.effects__list');
+const effectLevelContainer = form.querySelector('.img-upload__effect-level');
+const effectLevelSlider = form.querySelector('.effect-level__slider');
+const effectLevelValue = form.querySelector('.effect-level__value');
+
+let currentScale = DEFAULT_SCALE;
+let currentEffect = 'none';
+let slider = null;
 
 const updateScale = (newScale) => {
   currentScale = newScale;

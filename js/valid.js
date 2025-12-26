@@ -1,5 +1,9 @@
 import { checkStringLength } from './util.js';
 
+const MAX_HASHTAG_LENGTH = 20;
+const MAX_HASHTAG_COUNT = 5;
+const MAX_COMMENT_LENGTH = 140;
+
 const form = document.querySelector('.img-upload__form');
 const hashtagsInput = form.querySelector('.text__hashtags');
 const commentInput = form.querySelector('.text__description');
@@ -17,7 +21,7 @@ const validateHashtagFormat = (hashtag) => {
     return false;
   }
 
-  if (hashtag.length > 20) {
+  if (hashtag.length > MAX_HASHTAG_LENGTH) {
     return false;
   }
 
@@ -44,7 +48,7 @@ const validateHashtags = (value) => {
   const hashtags = value.trim().split(/\s+/).filter((tag) => tag !== '');
 
   // Проверка на количество хэштегов
-  if (hashtags.length > 5) {
+  if (hashtags.length > MAX_HASHTAG_COUNT) {
     return false;
   }
 
@@ -67,7 +71,7 @@ function validateComments(value) {
   if (value.trim() === '') {
     return true;
   }
-  return checkStringLength(value, 140);
+  return checkStringLength(value, MAX_COMMENT_LENGTH);
 }
 
 export {
