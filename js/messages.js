@@ -1,15 +1,16 @@
 import { isEscKey } from './util.js';
 import { onFormEscKeydown } from './form.js';
 
+const DATA_ERROR_TIMEOUT = 5000; // 5 секунд в миллисекундах
+
 const messageTemplate = {
   error: document.querySelector('#error').content.querySelector('.error'),
   success: document.querySelector('#success').content.querySelector('.success'),
-  dataError: null // Добавляем шаблон для ошибки данных
+  dataError: null
 };
 
 let messageElement = null;
 
-// Создаём шаблон для ошибки данных, если он не существует в DOM
 if (!messageTemplate.dataError) {
   messageTemplate.dataError = document.createElement('div');
   messageTemplate.dataError.className = 'data-error';
@@ -65,7 +66,6 @@ function closeMessage() {
 const showMessage = (type) => {
   messageElement = messageTemplate[type].cloneNode(true);
   messageElement.style.zIndex = '1000';
-  // Для обычных error/success сообщений
   if (type === 'error' || type === 'success') {
     const button = messageElement.querySelector(`.${type}__button`);
     if (button) {
@@ -76,10 +76,8 @@ const showMessage = (type) => {
     document.addEventListener('keydown', onMessageEscKeydown);
     document.addEventListener('click', onDocumentClick);
   }
-  // Для data-error не добавляем обработчики закрытия
   if (type === 'dataError') {
-    // Автоматическое скрытие через 5 секунд
-    setTimeout(closeMessage, 5000);
+    setTimeout(closeMessage, DATA_ERROR_TIMEOUT);
   }
   document.body.appendChild(messageElement);
 };
